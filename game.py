@@ -1,5 +1,6 @@
 import pygame
 import os
+import start
 from random import choice
 pygame.init()
 fps = 60
@@ -7,8 +8,10 @@ size = 1200, 620
 screen = pygame.display.set_mode(size)
 running = True
 clock = pygame.time.Clock()
-damage = 20
 all_units = pygame.sprite.Group()
+
+damage = 20
+lines = [0, 104, 208, 312, 416, 520]
 
 
 def load_image(name, color_key=None):
@@ -63,14 +66,14 @@ class tank(pygame.sprite.Sprite):
     image = load_image("tank.png")
     image_boom = load_image("tank_boom.png")
 
-    def __init__(self, hp, damage, group):
+    def __init__(self, hp, damage, group, line):
         super().__init__(group)
         self.hp = hp
         self.damage = damage
         self.speed = 10
         self.rect = self.image.get_rect()
         self.rect.x = 1200
-        self.rect.y = choice([0, 124, 248, 372, 496])
+        self.rect.y = lines[line]
 
     def update(self, *args):
         if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
@@ -83,8 +86,8 @@ class tank(pygame.sprite.Sprite):
             self.speed = 0
 
 
-for _ in range(10):
-    tank(20, 30, all_units)
+for i in range(5):
+    tank(20, 30, all_units, i)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
