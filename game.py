@@ -1,7 +1,5 @@
 import pygame
 import os
-import start
-from random import choice
 pygame.init()
 fps = 60
 size = 1200, 620
