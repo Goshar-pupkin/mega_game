@@ -1,5 +1,6 @@
 import pygame
 import os
+import start
 pygame.init()
 fps = 60
 size = 1200, 620
