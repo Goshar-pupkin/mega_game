@@ -1,7 +1,6 @@
 import pygame
 import os
 import sys
-from random import choice
 pygame.init()
 fps = 60
 size = 1200, 620
@@ -34,7 +33,11 @@ def terminate():
 def start_screen():
     global running
 
-    button_start = Button((0, 0, 255), 150, 225, 250, 100, "START GAME")
+    button_start = Button((0, 0, 0), 475, 225, 250, 100, (0, 0, 0), text="START GAME")
+
+    pygame.mixer.music.load(os.path.join('data', 'fon.mp3'))
+    pygame.mixer.music.play()
+    pygame.mixer.music.set_volume(0.05)
 
     fon = pygame.transform.scale(load_image('fon.jpg'), (size))
 
@@ -54,33 +57,36 @@ def start_screen():
 
             if event.type == pygame.MOUSEMOTION:
                 if button_start.isOver(pos):
-                    button_start.colour = (255, 0, 0)
+                    button_start.colour = (71, 74, 81)
+                    button_start.text_colour = (71, 74, 81)
                 else:
-                    button_start.colour = (0, 0, 255)
+                    button_start.colour = (0, 0, 0)
+                    button_start.text_colour = (0, 0, 0)
         clock.tick(fps)
         pygame.display.flip()
-        button_start.draw(screen)
+        button_start.draw(screen, outline=10)
 
 
 class Button:
-    def __init__(self, colour, x, y, width, height, text=""):
+    def __init__(self, colour, x, y, width, height, text_colour, text=""):
         self.colour = colour
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.text = text
+        self.text_colour = text_colour
 
     def draw(self, screen, outline=None):
         if outline:
-            pygame.draw.rect(screen, outline, (self.x-2, self.y-2, self.width+4, self.height+4), 0)
+            pygame.draw.rect(screen, self.colour, (self.x, self.y, self.width, self.height), 5)
 
         else:
             pygame.draw.rect(screen, self.colour, (self.x, self.y, self.width, self.height), 0)
 
         if self.text != "":
-            font = pygame.font.SysFont("comicsans", 60)
-            text = font.render(self.text, 1, (0, 0, 0))
+            font = pygame.font.SysFont("comicsans", 40)
+            text = font.render(self.text, 1, (self.text_colour))
             screen.blit(text, (self.x + (self.width / 2 - text.get_width() / 2),
                                self.y + (self.height / 2 - text.get_height() / 2)))
 
@@ -90,5 +96,3 @@ class Button:
                 return True
         return False
 
-
-start_screen()
